@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Web Development Assistant</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .chat-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 800px;
+            height: 600px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .chat-header h1 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        .chat-header p {
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+
+        .ai-status {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.8rem;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #4CAF50;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .message {
+            display: flex;
+            gap: 10px;
+            max-width: 80%;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.user {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+
+        .message.assistant {
+            align-self: flex-start;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .avatar.user {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .avatar.assistant {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+        }
+
+        .message-content {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 18px;
+            border-bottom-left-radius: 5px;
+            line-height: 1.5;
+        }
+
+        .message.user .message-content {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-bottom-left-radius: 18px;
+            border-bottom-right-radius: 5px;
+        }
+
+        .message.assistant .message-content {
+            background: #f8f9fa;
+            color: #333;
+        }
+
+        .typing-indicator {
+            display: flex;
+            gap: 5px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 18px;
+            border-bottom-left-radius: 5px;
+            align-self: flex-start;
+            max-width: 80px;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: #999;
+            border-radius: 50%;
+            animation: typing 1.4s infinite ease-in-out;
+        }
+
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes typing {
+            0%, 80%, 100% {
+                transform: scale(0.8);
+                opacity: 0.5;
+            }
+            40% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .chat-input {
+            padding: 20px;
+            border-top: 1px solid #eee;
+            background: white;
+        }
+
+        .input-container {
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+        }
+
+        .input-field {
+            flex: 1;
+            border: 2px solid #eee;
+            border-radius: 25px;
+            padding: 15px 20px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s ease;
+            resize: none;
+            max-height: 120px;
+            min-height: 50px;
+        }
+
+        .input-field:focus {
+            border-color: #667eea;
+        }
+
+        .send-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .send-button:hover {
+            transform: scale(1.1);
+        }
+
+        .send-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .quick-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .quick-action {
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .quick-action:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+
+        .suggestion-chips {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .suggestion-chip {
+            background: #e3f2fd;
+            color: #1976d2;
+            border: 1px solid #bbdefb;
+            border-radius: 15px;
+            padding: 5px 12px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+        }
+
+        .suggestion-chip:hover {
+            background: #1976d2;
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .chat-container {
+                height: 100vh;
+                border-radius: 0;
+            }
+            
+            .message {
+                max-width: 90%;
+            }
+            
+            .quick-actions {
+                justify-content: center;
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            <div class="ai-status">
+                <div class="status-dot"></div>
+                <span>AI Online</span>
+            </div>
+            <h1>🤖 AI Web Development Assistant</h1>
+            <p>ถามอะไรก็ได้เกี่ยวกับการพัฒนาเว็บไซต์ HTML, CSS, JavaScript</p>
+        </div>
+
+        <div class="chat-messages" id="chatMessages">
+            <div class="message assistant">
+                <div class="avatar assistant">AI</div>
+                <div class="message-content">
+                    สวัสดีครับ! 👋 ฉันเป็น AI Assistant ที่เชี่ยวชาญด้านการพัฒนาเว็บไซต์ 
+                    ฉันสามารถช่วยคุณได้ในเรื่องต่างๆ เช่น:
+                    <br><br>
+                    • การเขียน HTML, CSS, JavaScript<br>
+                    • การปรับปรุง SEO และ Accessibility<br>
+                    • การออกแบบ Responsive Design<br>
+                    • การแก้ไขปัญหาและ Debug<br>
+                    • คำแนะนำเกี่ยวกับ Best Practices<br><br>
+                    คุณมีคำถามอะไรไหมครับ?
+                </div>
+            </div>
+        </div>
+
+        <div class="chat-input">
+            <div class="input-container">
+                <textarea 
+                    class="input-field" 
+                    id="messageInput" 
+                    placeholder="พิมพ์คำถามของคุณที่นี่..."
+                    rows="1"
+                ></textarea>
+                <button class="send-button" id="sendButton">
+                    ➤
+                </button>
+            </div>
+            
+            <div class="quick-actions">
+                <div class="quick-action" onclick="askQuestion('ช่วยแนะนำการเขียน HTML5 ที่ดี')">
+                    💡 HTML5 Best Practices
+                </div>
+                <div class="quick-action" onclick="askQuestion('วิธีทำให้เว็บไซต์ Responsive')">
+                    📱 Responsive Design
+                </div>
+                <div class="quick-action" onclick="askQuestion('เทคนิคการทำ SEO')">
+                    🔍 SEO Tips
+                </div>
+                <div class="quick-action" onclick="askQuestion('วิธีเพิ่ม Accessibility')">
+                    ♿ Accessibility
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class AIAssistant {
+            constructor() {
+                this.messages = [];
+                this.isTyping = false;
+                this.knowledgeBase = {
+                    'html5': {
+                        keywords: ['html', 'html5', 'semantic', 'doctype'],
+                        responses: [
+                            'HTML5 มีฟีเจอร์ใหม่หลายอย่าง เช่น semantic elements (header, nav, main, section, article, footer), form validation, audio/video support, และ Canvas API',
+                            'ควรใช้ semantic HTML elements เพื่อให้โค้ดมีความหมายและช่วยเรื่อง SEO และ accessibility',
+                            'อย่าลืมใส่ DOCTYPE declaration และ lang attribute ใน html tag'
+                        ]
+                    },
+                    'css': {
+                        keywords: ['css', 'styling', 'layout', 'responsive', 'flexbox', 'grid'],
+                        responses: [
+                            'CSS Grid และ Flexbox เป็นเครื่องมือที่ทรงพลังสำหรับการจัด layout',
+                            'ใช้ media queries สำหรับ responsive design',
+                            'ควรใช้ CSS custom properties (variables) เพื่อให้โค้ด maintain ได้ง่ายขึ้น'
+                        ]
+                    },
+                    'javascript': {
+                        keywords: ['javascript', 'js', 'function', 'event', 'dom'],
+                        responses: [
+                            'JavaScript ES6+ มีฟีเจอร์ใหม่เช่น arrow functions, destructuring, template literals, และ async/await',
+                            'ควรใช้ event delegation เพื่อเพิ่มประสิทธิภาพ',
+                            'ใช้ modern JavaScript features แต่ต้องคำนึงถึง browser compatibility'
+                        ]
+                    },
+                    'seo': {
+                        keywords: ['seo', 'search', 'meta', 'title', 'description'],
+                        responses: [
+                            'SEO เริ่มต้นจาก technical SEO เช่น page speed, mobile-friendly, และ HTTPS',
+                            'ใช้ semantic HTML และ proper heading hierarchy',
+                            'เพิ่ม meta description, title tags, และ structured data'
+                        ]
+                    },
+                    'accessibility': {
+                        keywords: ['accessibility', 'aria', 'screen reader', 'keyboard'],
+                        responses: [
+                            'Accessibility เริ่มต้นจาก semantic HTML และ proper labeling',
+                            'ใช้ ARIA attributes เมื่อจำเป็น และทดสอบกับ screen readers',
+                            'รองรับ keyboard navigation และมี sufficient color contrast'
+                        ]
+                    },
+                    'responsive': {
+                        keywords: ['responsive', 'mobile', 'tablet', 'viewport'],
+                        responses: [
+                            'ใช้ mobile-first approach ในการออกแบบ',
+                            'ใช้ CSS Grid และ Flexbox สำหรับ flexible layouts',
+                            'ทดสอบบนอุปกรณ์จริงและใช้ browser dev tools'
+                        ]
+                    }
+                };
+            }
+
+            addMessage(content, sender) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${sender}`;
+                
+                const avatar = document.createElement('div');
+                avatar.className = `avatar ${sender}`;
+                avatar.textContent = sender === 'user' ? 'U' : 'AI';
+                
+                const messageContent = document.createElement('div');
+                messageContent.className = 'message-content';
+                messageContent.innerHTML = content;
+                
+                messageDiv.appendChild(avatar);
+                messageDiv.appendChild(messageContent);
+                
+                document.getElementById('chatMessages').appendChild(messageDiv);
+                this.scrollToBottom();
+            }
+
+            showTyping() {
+                if (this.isTyping) return;
+                
+                this.isTyping = true;
+                const typingDiv = document.createElement('div');
+                typingDiv.className = 'typing-indicator';
+                typingDiv.id = 'typingIndicator';
+                
+                for (let i = 0; i < 3; i++) {
+                    const dot = document.createElement('div');
+                    dot.className = 'typing-dot';
+                    typingDiv.appendChild(dot);
+                }
+                
+                document.getElementById('chatMessages').appendChild(typingDiv);
+                this.scrollToBottom();
+            }
+
+            hideTyping() {
+                const typingIndicator = document.getElementById('typingIndicator');
+                if (typingIndicator) {
+                    typingIndicator.remove();
+                }
+                this.isTyping = false;
+            }
+
+            async generateResponse(userMessage) {
+                // Simulate AI processing time
+                await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 2000));
+                
+                const lowerMessage = userMessage.toLowerCase();
+                let response = '';
+                
+                // Check knowledge base
+                for (const [topic, data] of Object.entries(this.knowledgeBase)) {
+                    if (data.keywords.some(keyword => lowerMessage.includes(keyword))) {
+                        const randomResponse = data.responses[Math.floor(Math.random() * data.responses.length)];
+                        response = randomResponse;
+                        break;
+                    }
+                }
+                
+                // Default responses if no specific topic found
+                if (!response) {
+                    const defaultResponses = [
+                        'นั่นเป็นคำถามที่ดีครับ! ฉันจะช่วยคุณได้ในเรื่องการพัฒนาเว็บไซต์ HTML, CSS, JavaScript, SEO, และ Accessibility',
+                        'ขอบคุณสำหรับคำถามครับ! ฉันเชี่ยวชาญด้านการพัฒนาเว็บไซต์ สามารถถามได้ทุกเรื่องเลยครับ',
+                        'ฉันพร้อมช่วยคุณครับ! คุณสามารถถามเกี่ยวกับ HTML, CSS, JavaScript, หรือการพัฒนาเว็บไซต์ได้เลย',
+                        'คำถามที่น่าสนใจครับ! ฉันจะพยายามให้คำแนะนำที่ดีที่สุดเกี่ยวกับการพัฒนาเว็บไซต์'
+                    ];
+                    response = defaultResponses[Math.floor(Math.random() * defaultResponses.length)];
+                }
+                
+                // Add some personality and suggestions
+                response += '<br><br><strong>💡 คำแนะนำเพิ่มเติม:</strong><br>';
+                response += '• ลองถามเกี่ยวกับ HTML5 semantic elements<br>';
+                response += '• เรียนรู้ CSS Grid และ Flexbox<br>';
+                response += '• ศึกษา JavaScript ES6+ features<br>';
+                response += '• ปรับปรุง SEO และ Accessibility';
+                
+                return response;
+            }
+
+            scrollToBottom() {
+                const chatMessages = document.getElementById('chatMessages');
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            async handleUserMessage(message) {
+                this.addMessage(message, 'user');
+                this.showTyping();
+                
+                const response = await this.generateResponse(message);
+                this.hideTyping();
+                this.addMessage(response, 'assistant');
+            }
+        }
+
+        // Initialize AI Assistant
+        const ai = new AIAssistant();
+        
+        // DOM elements
+        const messageInput = document.getElementById('messageInput');
+        const sendButton = document.getElementById('sendButton');
+        
+        // Event listeners
+        sendButton.addEventListener('click', sendMessage);
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+        
+        // Auto-resize textarea
+        messageInput.addEventListener('input', () => {
+            messageInput.style.height = 'auto';
+            messageInput.style.height = Math.min(messageInput.scrollHeight, 120) + 'px';
+        });
+        
+        function sendMessage() {
+            const message = messageInput.value.trim();
+            if (message && !ai.isTyping) {
+                ai.handleUserMessage(message);
+                messageInput.value = '';
+                messageInput.style.height = 'auto';
+                sendButton.disabled = true;
+                setTimeout(() => {
+                    sendButton.disabled = false;
+                }, 1000);
+            }
+        }
+        
+        function askQuestion(question) {
+            if (!ai.isTyping) {
+                ai.handleUserMessage(question);
+            }
+        }
+        
+        // Focus on input when page loads
+        window.addEventListener('load', () => {
+            messageInput.focus();
+        });
+    </script>
+</body>
+</html> 

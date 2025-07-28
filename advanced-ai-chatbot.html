@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced AI Web Development Assistant</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .chat-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 900px;
+            height: 700px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .chat-header h1 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        .chat-header p {
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+
+        .ai-status {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.8rem;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #4CAF50;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .ai-capabilities {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .capability-tag {
+            background: rgba(255,255,255,0.2);
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .message {
+            display: flex;
+            gap: 10px;
+            max-width: 80%;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.user {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+
+        .message.assistant {
+            align-self: flex-start;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .avatar.user {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .avatar.assistant {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+        }
+
+        .message-content {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 18px;
+            border-bottom-left-radius: 5px;
+            line-height: 1.5;
+        }
+
+        .message.user .message-content {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-bottom-left-radius: 18px;
+            border-bottom-right-radius: 5px;
+        }
+
+        .message.assistant .message-content {
+            background: #f8f9fa;
+            color: #333;
+        }
+
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            margin: 10px 0;
+            border-left: 4px solid #667eea;
+        }
+
+        .typing-indicator {
+            display: flex;
+            gap: 5px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 18px;
+            border-bottom-left-radius: 5px;
+            align-self: flex-start;
+            max-width: 80px;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: #999;
+            border-radius: 50%;
+            animation: typing 1.4s infinite ease-in-out;
+        }
+
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes typing {
+            0%, 80%, 100% {
+                transform: scale(0.8);
+                opacity: 0.5;
+            }
+            40% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .chat-input {
+            padding: 20px;
+            border-top: 1px solid #eee;
+            background: white;
+        }
+
+        .input-container {
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+        }
+
+        .input-field {
+            flex: 1;
+            border: 2px solid #eee;
+            border-radius: 25px;
+            padding: 15px 20px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s ease;
+            resize: none;
+            max-height: 120px;
+            min-height: 50px;
+        }
+
+        .input-field:focus {
+            border-color: #667eea;
+        }
+
+        .send-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .send-button:hover {
+            transform: scale(1.1);
+        }
+
+        .send-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .quick-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .quick-action {
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .quick-action:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .suggestion-chips {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .suggestion-chip {
+            background: #e3f2fd;
+            color: #1976d2;
+            border: 1px solid #bbdefb;
+            border-radius: 15px;
+            padding: 5px 12px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+        }
+
+        .suggestion-chip:hover {
+            background: #1976d2;
+            color: white;
+        }
+
+        .ai-thinking {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .thinking-dots {
+            display: flex;
+            gap: 2px;
+        }
+
+        .thinking-dot {
+            width: 4px;
+            height: 4px;
+            background: #999;
+            border-radius: 50%;
+            animation: thinking 1.5s infinite ease-in-out;
+        }
+
+        .thinking-dot:nth-child(1) { animation-delay: 0s; }
+        .thinking-dot:nth-child(2) { animation-delay: 0.2s; }
+        .thinking-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes thinking {
+            0%, 60%, 100% {
+                transform: translateY(0);
+                opacity: 0.3;
+            }
+            30% {
+                transform: translateY(-5px);
+                opacity: 1;
+            }
+        }
+
+        .message-actions {
+            display: flex;
+            gap: 5px;
+            margin-top: 5px;
+        }
+
+        .action-button {
+            background: none;
+            border: none;
+            color: #666;
+            cursor: pointer;
+            font-size: 0.8rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            transition: background-color 0.2s ease;
+        }
+
+        .action-button:hover {
+            background: #f0f0f0;
+        }
+
+        @media (max-width: 768px) {
+            .chat-container {
+                height: 100vh;
+                border-radius: 0;
+            }
+            
+            .message {
+                max-width: 90%;
+            }
+            
+            .quick-actions {
+                justify-content: center;
+            }
+
+            .ai-capabilities {
+                display: none;
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            <div class="ai-capabilities">
+                <div class="capability-tag">🤖 AI</div>
+                <div class="capability-tag">💻 Code</div>
+                <div class="capability-tag">🎨 Design</div>
+                <div class="capability-tag">🔍 SEO</div>
+            </div>
+            <div class="ai-status">
+                <div class="status-dot"></div>
+                <span>AI Online</span>
+            </div>
+            <h1>🤖 Advanced AI Web Development Assistant</h1>
+            <p>AI ที่เชี่ยวชาญด้านการพัฒนาเว็บไซต์ พร้อมให้คำแนะนำและสร้างโค้ดให้คุณ</p>
+        </div>
+
+        <div class="chat-messages" id="chatMessages">
+            <div class="message assistant">
+                <div class="avatar assistant">AI</div>
+                <div class="message-content">
+                    สวัสดีครับ! 👋 ฉันเป็น Advanced AI Assistant ที่เชี่ยวชาญด้านการพัฒนาเว็บไซต์
+                    <br><br>
+                    <strong>ความสามารถของฉัน:</strong><br>
+                    🤖 <span class="highlight">AI-Powered Responses</span> - ตอบคำถามด้วย AI ที่เข้าใจบริบท<br>
+                    💻 <span class="highlight">Code Generation</span> - สร้างโค้ด HTML, CSS, JavaScript<br>
+                    🎨 <span class="highlight">Design Suggestions</span> - แนะนำการออกแบบ UI/UX<br>
+                    🔍 <span class="highlight">SEO Optimization</span> - ปรับปรุง SEO และ Performance<br>
+                    ♿ <span class="highlight">Accessibility</span> - ทำให้เว็บไซต์เข้าถึงได้ทุกคน<br>
+                    📱 <span class="highlight">Responsive Design</span> - ออกแบบให้รองรับทุกอุปกรณ์<br><br>
+                    ลองถามฉันดูครับ! เช่น "ช่วยสร้างฟอร์มติดต่อที่สวยงาม" หรือ "วิธีทำให้เว็บไซต์ SEO-friendly"
+                </div>
+            </div>
+        </div>
+
+        <div class="chat-input">
+            <div class="input-container">
+                <textarea 
+                    class="input-field" 
+                    id="messageInput" 
+                    placeholder="พิมพ์คำถามของคุณที่นี่... (เช่น: ช่วยสร้างปุ่มที่สวยงาม, วิธีทำ SEO, สร้าง responsive layout)"
+                    rows="1"
+                ></textarea>
+                <button class="send-button" id="sendButton">
+                    ➤
+                </button>
+            </div>
+            
+            <div class="quick-actions">
+                <div class="quick-action" onclick="askQuestion('ช่วยสร้างปุ่มที่สวยงามด้วย CSS')">
+                    🎨 สร้างปุ่มสวย
+                </div>
+                <div class="quick-action" onclick="askQuestion('ช่วยสร้างฟอร์มติดต่อที่ responsive')">
+                    📝 ฟอร์มติดต่อ
+                </div>
+                <div class="quick-action" onclick="askQuestion('วิธีทำให้เว็บไซต์ SEO-friendly')">
+                    🔍 SEO Tips
+                </div>
+                <div class="quick-action" onclick="askQuestion('ช่วยสร้าง navigation menu ที่สวยงาม')">
+                    🧭 Navigation
+                </div>
+                <div class="quick-action" onclick="askQuestion('วิธีเพิ่ม accessibility ให้เว็บไซต์')">
+                    ♿ Accessibility
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class AdvancedAIAssistant {
+            constructor() {
+                this.messages = [];
+                this.isTyping = false;
+                this.conversationContext = [];
+                this.knowledgeBase = {
+                    'html': {
+                        keywords: ['html', 'html5', 'semantic', 'doctype', 'element', 'tag'],
+                        responses: [
+                            'HTML5 มี semantic elements ที่สำคัญ: <header>, <nav>, <main>, <section>, <article>, <aside>, <footer>',
+                            'ควรใช้ semantic HTML เพื่อ SEO และ accessibility ที่ดีขึ้น',
+                            'อย่าลืมใส่ DOCTYPE declaration และ lang attribute'
+                        ],
+                        codeExamples: {
+                            'button': `<button class="btn btn-primary">ปุ่มสวยงาม</button>`,
+                            'form': `<form class="contact-form">
+    <input type="text" placeholder="ชื่อ" required>
+    <input type="email" placeholder="อีเมล" required>
+    <button type="submit">ส่ง</button>
+</form>`,
+                            'navigation': `<nav class="navbar">
+    <ul>
+        <li><a href="#home">หน้าแรก</a></li>
+        <li><a href="#about">เกี่ยวกับเรา</a></li>
+        <li><a href="#contact">ติดต่อ</a></li>
+    </ul>
+</nav>`
+                        }
+                    },
+                    'css': {
+                        keywords: ['css', 'styling', 'layout', 'responsive', 'flexbox', 'grid', 'animation'],
+                        responses: [
+                            'CSS Grid และ Flexbox เป็นเครื่องมือทรงพลังสำหรับ layout',
+                            'ใช้ CSS custom properties (variables) เพื่อ maintainability',
+                            'Media queries สำคัญสำหรับ responsive design'
+                        ],
+                        codeExamples: {
+                            'button-styles': `.btn {
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}`,
+                            'responsive-grid': `.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+@media (max-width: 768px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+}`,
+                            'animation': `@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate {
+    animation: fadeIn 0.5s ease-out;
+}`
+                        }
+                    },
+                    'javascript': {
+                        keywords: ['javascript', 'js', 'function', 'event', 'dom', 'api', 'async'],
+                        responses: [
+                            'JavaScript ES6+ มี arrow functions, destructuring, template literals',
+                            'ใช้ async/await สำหรับ asynchronous operations',
+                            'Event delegation ช่วยเพิ่มประสิทธิภาพ'
+                        ],
+                        codeExamples: {
+                            'form-handler': `document.getElementById('contactForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const formData = new FormData(e.target);
+    const data = Object.fromEntries(formData);
+    
+    try {
+        const response = await fetch('/api/contact', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+        
+        if (response.ok) {
+            alert('ส่งข้อความสำเร็จ!');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
+});`,
+                            'smooth-scroll': `document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        target.scrollIntoView({ behavior: 'smooth' });
+    });
+});`,
+                            'modal': `function openModal() {
+    const modal = document.getElementById('modal');
+    modal.style.display = 'block';
+    document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+    const modal = document.getElementById('modal');
+    modal.style.display = 'none';
+    document.body.style.overflow = 'auto';
+}`
+                        }
+                    },
+                    'seo': {
+                        keywords: ['seo', 'search', 'meta', 'title', 'description', 'optimization'],
+                        responses: [
+                            'SEO เริ่มต้นจาก technical SEO: page speed, mobile-friendly, HTTPS',
+                            'ใช้ semantic HTML และ proper heading hierarchy',
+                            'เพิ่ม meta description, title tags, และ structured data'
+                        ],
+                        codeExamples: {
+                            'meta-tags': `<!-- SEO Meta Tags -->
+<meta name="description" content="คำอธิบายเว็บไซต์ของคุณ">
+<meta name="keywords" content="คำสำคัญ, SEO, keywords">
+<meta name="author" content="ชื่อผู้เขียน">
+<meta name="robots" content="index, follow">
+
+<!-- Open Graph -->
+<meta property="og:title" content="ชื่อหน้าเว็บ">
+<meta property="og:description" content="คำอธิบาย">
+<meta property="og:image" content="URL รูปภาพ">
+<meta property="og:url" content="URL หน้าเว็บ">`,
+                            'structured-data': `<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "ชื่อบริษัท",
+    "url": "https://example.com",
+    "logo": "https://example.com/logo.png"
+}
+</script>`
+                        }
+                    },
+                    'accessibility': {
+                        keywords: ['accessibility', 'aria', 'screen reader', 'keyboard', 'wcag'],
+                        responses: [
+                            'Accessibility เริ่มต้นจาก semantic HTML และ proper labeling',
+                            'ใช้ ARIA attributes เมื่อจำเป็น และทดสอบกับ screen readers',
+                            'รองรับ keyboard navigation และมี sufficient color contrast'
+                        ],
+                        codeExamples: {
+                            'aria-example': `<button aria-label="ปิดเมนู" aria-expanded="false">
+    <span class="hamburger"></span>
+</button>
+
+<div role="alert" aria-live="polite">
+    ข้อความแจ้งเตือน
+</div>`,
+                            'focus-management': `/* Focus styles */
+button:focus,
+input:focus,
+a:focus {
+    outline: 3px solid #007bff;
+    outline-offset: 2px;
+}
+
+/* Skip link */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 6px;
+    background: #007bff;
+    color: white;
+    padding: 8px;
+    text-decoration: none;
+}
+
+.skip-link:focus {
+    top: 6px;
+}`
+                        }
+                    },
+                    'responsive': {
+                        keywords: ['responsive', 'mobile', 'tablet', 'viewport', 'media query'],
+                        responses: [
+                            'ใช้ mobile-first approach ในการออกแบบ',
+                            'ใช้ CSS Grid และ Flexbox สำหรับ flexible layouts',
+                            'ทดสอบบนอุปกรณ์จริงและใช้ browser dev tools'
+                        ],
+                        codeExamples: {
+                            'mobile-first': `/* Mobile first approach */
+.container {
+    padding: 10px;
+    max-width: 100%;
+}
+
+/* Tablet */
+@media (min-width: 768px) {
+    .container {
+        padding: 20px;
+        max-width: 750px;
+        margin: 0 auto;
+    }
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+    .container {
+        max-width: 1200px;
+    }
+}`,
+                            'flexbox-layout': `.flex-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+@media (min-width: 768px) {
+    .flex-container {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    
+    .flex-item {
+        flex: 1 1 300px;
+    }
+}`
+                        }
+                    }
+                };
+            }
+
+            addMessage(content, sender, showThinking = false) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${sender}`;
+                
+                const avatar = document.createElement('div');
+                avatar.className = `avatar ${sender}`;
+                avatar.textContent = sender === 'user' ? 'U' : 'AI';
+                
+                const messageContent = document.createElement('div');
+                messageContent.className = 'message-content';
+                messageContent.innerHTML = content;
+                
+                messageDiv.appendChild(avatar);
+                messageDiv.appendChild(messageContent);
+                
+                if (showThinking && sender === 'assistant') {
+                    const thinkingDiv = document.createElement('div');
+                    thinkingDiv.className = 'ai-thinking';
+                    thinkingDiv.innerHTML = `
+                        <span>AI กำลังคิด...</span>
+                        <div class="thinking-dots">
+                            <div class="thinking-dot"></div>
+                            <div class="thinking-dot"></div>
+                            <div class="thinking-dot"></div>
+                        </div>
+                    `;
+                    messageDiv.appendChild(thinkingDiv);
+                }
+                
+                document.getElementById('chatMessages').appendChild(messageDiv);
+                this.scrollToBottom();
+            }
+
+            showTyping() {
+                if (this.isTyping) return;
+                
+                this.isTyping = true;
+                const typingDiv = document.createElement('div');
+                typingDiv.className = 'typing-indicator';
+                typingDiv.id = 'typingIndicator';
+                
+                for (let i = 0; i < 3; i++) {
+                    const dot = document.createElement('div');
+                    dot.className = 'typing-dot';
+                    typingDiv.appendChild(dot);
+                }
+                
+                document.getElementById('chatMessages').appendChild(typingDiv);
+                this.scrollToBottom();
+            }
+
+            hideTyping() {
+                const typingIndicator = document.getElementById('typingIndicator');
+                if (typingIndicator) {
+                    typingIndicator.remove();
+                }
+                this.isTyping = false;
+            }
+
+            async generateResponse(userMessage) {
+                // Simulate AI processing with different thinking patterns
+                const thinkingTime = 1500 + Math.random() * 3000;
+                await new Promise(resolve => setTimeout(resolve, thinkingTime));
+                
+                const lowerMessage = userMessage.toLowerCase();
+                let response = '';
+                let codeExample = '';
+                let topic = '';
+                
+                // Analyze user intent and context
+                for (const [key, data] of Object.entries(this.knowledgeBase)) {
+                    if (data.keywords.some(keyword => lowerMessage.includes(keyword))) {
+                        topic = key;
+                        const randomResponse = data.responses[Math.floor(Math.random() * data.responses.length)];
+                        response = randomResponse;
+                        
+                        // Add relevant code example
+                        const codeKeys = Object.keys(data.codeExamples);
+                        if (codeKeys.length > 0) {
+                            const randomCodeKey = codeKeys[Math.floor(Math.random() * codeKeys.length)];
+                            codeExample = data.codeExamples[randomCodeKey];
+                        }
+                        break;
+                    }
+                }
+                
+                // Generate contextual response
+                if (!response) {
+                    if (lowerMessage.includes('สร้าง') || lowerMessage.includes('ทำ')) {
+                        response = 'ฉันจะช่วยคุณสร้างโค้ดที่คุณต้องการครับ! ฉันสามารถสร้าง HTML, CSS, และ JavaScript ได้';
+                        codeExample = this.generateCodeExample(userMessage);
+                    } else if (lowerMessage.includes('ปัญหา') || lowerMessage.includes('error')) {
+                        response = 'ฉันจะช่วยคุณแก้ไขปัญหาครับ! ลองบอกรายละเอียดเพิ่มเติมเกี่ยวกับปัญหาที่คุณเจอ';
+                    } else {
+                        const defaultResponses = [
+                            'นั่นเป็นคำถามที่ดีครับ! ฉันจะช่วยคุณได้ในเรื่องการพัฒนาเว็บไซต์',
+                            'ขอบคุณสำหรับคำถามครับ! ฉันเชี่ยวชาญด้านการพัฒนาเว็บไซต์',
+                            'ฉันพร้อมช่วยคุณครับ! คุณสามารถถามเกี่ยวกับการพัฒนาเว็บไซต์ได้เลย'
+                        ];
+                        response = defaultResponses[Math.floor(Math.random() * defaultResponses.length)];
+                    }
+                }
+                
+                // Add personality and suggestions
+                let fullResponse = response;
+                
+                if (codeExample) {
+                    fullResponse += '<br><br><strong>💻 ตัวอย่างโค้ด:</strong><br>';
+                    fullResponse += `<div class="code-block">${codeExample}</div>`;
+                }
+                
+                fullResponse += '<br><br><strong>💡 คำแนะนำเพิ่มเติม:</strong><br>';
+                fullResponse += '• ลองถามเกี่ยวกับ HTML5 semantic elements<br>';
+                fullResponse += '• เรียนรู้ CSS Grid และ Flexbox<br>';
+                fullResponse += '• ศึกษา JavaScript ES6+ features<br>';
+                fullResponse += '• ปรับปรุง SEO และ Accessibility<br>';
+                fullResponse += '• ทดสอบ Responsive Design';
+                
+                return fullResponse;
+            }
+
+            generateCodeExample(userMessage) {
+                const lowerMessage = userMessage.toLowerCase();
+                
+                if (lowerMessage.includes('ปุ่ม') || lowerMessage.includes('button')) {
+                    return `<button class="btn btn-primary">ปุ่มสวยงาม</button>
+
+<style>
+.btn {
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+</style>`;
+                } else if (lowerMessage.includes('ฟอร์ม') || lowerMessage.includes('form')) {
+                    return `<form class="contact-form">
+    <input type="text" placeholder="ชื่อ" required>
+    <input type="email" placeholder="อีเมล" required>
+    <textarea placeholder="ข้อความ" rows="5"></textarea>
+    <button type="submit">ส่งข้อความ</button>
+</form>
+
+<style>
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-width: 500px;
+}
+
+.contact-form input,
+.contact-form textarea {
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+.contact-form button {
+    background: #007bff;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+</style>`;
+                } else if (lowerMessage.includes('navigation') || lowerMessage.includes('เมนู')) {
+                    return `<nav class="navbar">
+    <ul>
+        <li><a href="#home">หน้าแรก</a></li>
+        <li><a href="#about">เกี่ยวกับเรา</a></li>
+        <li><a href="#services">บริการ</a></li>
+        <li><a href="#contact">ติดต่อ</a></li>
+    </ul>
+</nav>
+
+<style>
+.navbar ul {
+    display: flex;
+    list-style: none;
+    gap: 20px;
+    padding: 0;
+}
+
+.navbar a {
+    text-decoration: none;
+    color: #333;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.navbar a:hover {
+    background-color: #f0f0f0;
+}
+</style>`;
+                }
+                
+                return '';
+            }
+
+            scrollToBottom() {
+                const chatMessages = document.getElementById('chatMessages');
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            async handleUserMessage(message) {
+                this.addMessage(message, 'user');
+                this.showTyping();
+                
+                const response = await this.generateResponse(message);
+                this.hideTyping();
+                this.addMessage(response, 'assistant');
+                
+                // Add conversation context
+                this.conversationContext.push({
+                    user: message,
+                    assistant: response
+                });
+                
+                // Keep only last 10 messages for context
+                if (this.conversationContext.length > 10) {
+                    this.conversationContext.shift();
+                }
+            }
+        }
+
+        // Initialize Advanced AI Assistant
+        const ai = new AdvancedAIAssistant();
+        
+        // DOM elements
+        const messageInput = document.getElementById('messageInput');
+        const sendButton = document.getElementById('sendButton');
+        
+        // Event listeners
+        sendButton.addEventListener('click', sendMessage);
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+        
+        // Auto-resize textarea
+        messageInput.addEventListener('input', () => {
+            messageInput.style.height = 'auto';
+            messageInput.style.height = Math.min(messageInput.scrollHeight, 120) + 'px';
+        });
+        
+        function sendMessage() {
+            const message = messageInput.value.trim();
+            if (message && !ai.isTyping) {
+                ai.handleUserMessage(message);
+                messageInput.value = '';
+                messageInput.style.height = 'auto';
+                sendButton.disabled = true;
+                setTimeout(() => {
+                    sendButton.disabled = false;
+                }, 1000);
+            }
+        }
+        
+        function askQuestion(question) {
+            if (!ai.isTyping) {
+                ai.handleUserMessage(question);
+            }
+        }
+        
+        // Focus on input when page loads
+        window.addEventListener('load', () => {
+            messageInput.focus();
+        });
+    </script>
+</body>
+</html> 
