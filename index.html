@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เว็บไซต์ตัวอย่าง</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .error {
+            color: red;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        .success {
+            color: green;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        nav {
+            background-color: #333;
+            padding: 10px 0;
+            margin-bottom: 20px;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            margin: 0 5px;
+        }
+        nav a:hover {
+            background-color: #555;
+        }
+        .content-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #333;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="#home">หน้าแรก</a>
+        <a href="#about">เกี่ยวกับเรา</a>
+        <a href="#contact">ติดต่อ</a>
+        <a href="#services">บริการ</a>
+    </nav>
+
+    <div class="container">
+        <header>
+            <h1>เว็บไซต์ตัวอย่าง</h1>
+            <p>นี่คือตัวอย่างเว็บไซต์ที่ใช้ในการปรับปรุงโค้ด HTML</p>
+        </header>
+
+        <main>
+            <section class="content-section">
+                <h2>ข้อมูลเกี่ยวกับเรา</h2>
+                <p>บริษัทของเราให้บริการด้านเทคโนโลยีและโซลูชันดิจิทัลที่ครบครัน</p>
+                <p>เรามีประสบการณ์มากกว่า 10 ปีในการพัฒนาเว็บไซต์และแอปพลิเคชัน</p>
+            </section>
+
+            <section class="content-section">
+                <h2>ฟอร์มติดต่อ</h2>
+                <form id="contactForm">
+                    <div class="form-group">
+                        <label for="name">ชื่อ-นามสกุล:</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">อีเมล:</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">เบอร์โทรศัพท์:</label>
+                        <input type="tel" id="phone" name="phone">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="subject">หัวข้อ:</label>
+                        <select id="subject" name="subject" required>
+                            <option value="">เลือกหัวข้อ</option>
+                            <option value="general">คำถามทั่วไป</option>
+                            <option value="support">ขอความช่วยเหลือ</option>
+                            <option value="business">ธุรกิจ</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message">ข้อความ:</label>
+                        <textarea id="message" name="message" rows="5" required></textarea>
+                    </div>
+
+                    <button type="submit">ส่งข้อความ</button>
+                </form>
+            </section>
+
+            <section class="content-section">
+                <h2>บริการของเรา</h2>
+                <ul>
+                    <li>พัฒนาเว็บไซต์</li>
+                    <li>ออกแบบ UI/UX</li>
+                    <li>พัฒนาแอปพลิเคชันมือถือ</li>
+                    <li>ให้คำปรึกษาด้านเทคโนโลยี</li>
+                </ul>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <p>&copy; 2024 บริษัทตัวอย่าง. สงวนลิขสิทธิ์.</p>
+        </footer>
+    </div>
+
+    <script>
+        // JavaScript พื้นฐาน
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('ฟอร์มถูกส่งเรียบร้อยแล้ว!');
+        });
+    </script>
+</body>
+</html> 

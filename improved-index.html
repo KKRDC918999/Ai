@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="บริษัทเทคโนโลยีชั้นนำให้บริการพัฒนาเว็บไซต์ แอปพลิเคชัน และโซลูชันดิจิทัลครบครัน">
+    <meta name="keywords" content="พัฒนาเว็บไซต์, แอปพลิเคชัน, UI/UX, เทคโนโลยี, โซลูชันดิจิทัล">
+    <meta name="author" content="บริษัทตัวอย่าง">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://example.com/">
+    <meta property="og:title" content="บริษัทเทคโนโลยีชั้นนำ - ให้บริการพัฒนาเว็บไซต์และแอปพลิเคชัน">
+    <meta property="og:description" content="บริษัทเทคโนโลยีชั้นนำให้บริการพัฒนาเว็บไซต์ แอปพลิเคชัน และโซลูชันดิจิทัลครบครัน">
+    <meta property="og:image" content="https://example.com/images/og-image.jpg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://example.com/">
+    <meta property="twitter:title" content="บริษัทเทคโนโลยีชั้นนำ - ให้บริการพัฒนาเว็บไซต์และแอปพลิเคชัน">
+    <meta property="twitter:description" content="บริษัทเทคโนโลยีชั้นนำให้บริการพัฒนาเว็บไซต์ แอปพลิเคชัน และโซลูชันดิจิทัลครบครัน">
+    <meta property="twitter:image" content="https://example.com/images/twitter-image.jpg">
+
+    <!-- Security Headers -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';">
+
+    <title>บริษัทเทคโนโลยีชั้นนำ - ให้บริการพัฒนาเว็บไซต์และแอปพลิเคชัน</title>
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "บริษัทเทคโนโลยีชั้นนำ",
+        "description": "บริษัทเทคโนโลยีชั้นนำให้บริการพัฒนาเว็บไซต์ แอปพลิเคชัน และโซลูชันดิจิทัลครบครัน",
+        "url": "https://example.com",
+        "logo": "https://example.com/images/logo.png",
+        "contactPoint": {
+            "@type": "ContactPoint",
+            "telephone": "+66-2-123-4567",
+            "contactType": "customer service",
+            "availableLanguage": "Thai"
+        },
+        "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "123 ถนนตัวอย่าง",
+            "addressLocality": "กรุงเทพมหานคร",
+            "postalCode": "10400",
+            "addressCountry": "TH"
+        }
+    }
+    </script>
+
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+
+        /* Skip to main content link for accessibility */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 6px;
+            background: #007bff;
+            color: white;
+            padding: 8px;
+            text-decoration: none;
+            border-radius: 4px;
+            z-index: 1000;
+        }
+
+        .skip-link:focus {
+            top: 6px;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* Navigation */
+        nav {
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 20px;
+        }
+
+        .nav-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+            text-decoration: none;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-menu a {
+            color: #333;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav-menu a:hover,
+        .nav-menu a:focus {
+            background-color: #007bff;
+            color: white;
+            outline: 2px solid #0056b3;
+        }
+
+        .nav-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #333;
+        }
+
+        /* Main Content */
+        main {
+            padding: 3rem 0;
+        }
+
+        .content-section {
+            background: white;
+            margin: 2rem 0;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .content-section h2 {
+            color: #333;
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+            border-bottom: 3px solid #007bff;
+            padding-bottom: 0.5rem;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+            background-color: #fff;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+        }
+
+        input:invalid, textarea:invalid, select:invalid {
+            border-color: #dc3545;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        /* Button Styles */
+        .btn {
+            background-color: #007bff;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover, .btn:focus {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+        }
+
+        .btn-secondary:hover, .btn-secondary:focus {
+            background-color: #545b62;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        /* Alert Messages */
+        .alert {
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .alert-info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        /* Services Grid */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .service-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .service-card h3 {
+            color: #007bff;
+            margin-bottom: 1rem;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 3rem 0 1rem;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            color: #007bff;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section a {
+            color: #ccc;
+            text-decoration: none;
+        }
+
+        .footer-section a:hover {
+            color: #007bff;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid #555;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                flex-direction: column;
+                padding: 1rem;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            }
+
+            .nav-menu.active {
+                display: flex;
+            }
+
+            .nav-toggle {
+                display: block;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            header h1 {
+                font-size: 2rem;
+            }
+
+            .btn-group {
+                flex-direction: column;
+            }
+
+            .btn-group .btn {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 15px;
+            }
+
+            .content-section {
+                padding: 1.5rem;
+            }
+
+            header {
+                padding: 1.5rem 0;
+            }
+        }
+
+        /* Accessibility Improvements */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* High contrast mode support */
+        @media (prefers-contrast: high) {
+            .btn {
+                border: 2px solid currentColor;
+            }
+
+            input, textarea, select {
+                border: 2px solid currentColor;
+            }
+        }
+
+        /* Focus indicators for keyboard navigation */
+        .btn:focus,
+        input:focus,
+        textarea:focus,
+        select:focus,
+        a:focus {
+            outline: 3px solid #007bff;
+            outline-offset: 2px;
+        }
+
+        /* Loading states */
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #007bff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Skip to main content link for screen readers -->
+    <a href="#main-content" class="skip-link">ข้ามไปยังเนื้อหาหลัก</a>
+
+    <!-- Header -->
+    <header role="banner">
+        <div class="container">
+            <h1>บริษัทเทคโนโลยีชั้นนำ</h1>
+            <p>ให้บริการพัฒนาเว็บไซต์ แอปพลิเคชัน และโซลูชันดิจิทัลครบครัน</p>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav role="navigation" aria-label="เมนูหลัก">
+        <div class="container">
+            <a href="#" class="nav-brand" aria-label="กลับไปหน้าแรก">TechCorp</a>
+            
+            <button class="nav-toggle" aria-label="เปิดเมนู" aria-expanded="false" aria-controls="nav-menu">
+                ☰
+            </button>
+            
+            <ul class="nav-menu" id="nav-menu" role="menubar">
+                <li role="none"><a href="#home" role="menuitem">หน้าแรก</a></li>
+                <li role="none"><a href="#about" role="menuitem">เกี่ยวกับเรา</a></li>
+                <li role="none"><a href="#services" role="menuitem">บริการ</a></li>
+                <li role="none"><a href="#contact" role="menuitem">ติดต่อ</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main-content" role="main">
+        <div class="container">
+            <!-- About Section -->
+            <section id="about" class="content-section" aria-labelledby="about-heading">
+                <h2 id="about-heading">ข้อมูลเกี่ยวกับเรา</h2>
+                <p>บริษัทของเราให้บริการด้านเทคโนโลยีและโซลูชันดิจิทัลที่ครบครัน ด้วยประสบการณ์มากกว่า 10 ปีในการพัฒนาเว็บไซต์และแอปพลิเคชัน</p>
+                <p>เรามุ่งมั่นที่จะสร้างสรรค์โซลูชันที่ตอบโจทย์ความต้องการของลูกค้า และช่วยให้ธุรกิจของคุณเติบโตในโลกดิจิทัล</p>
+            </section>
+
+            <!-- Services Section -->
+            <section id="services" class="content-section" aria-labelledby="services-heading">
+                <h2 id="services-heading">บริการของเรา</h2>
+                <div class="services-grid">
+                    <article class="service-card">
+                        <h3>พัฒนาเว็บไซต์</h3>
+                        <p>พัฒนาเว็บไซต์ที่ทันสมัย รองรับทุกอุปกรณ์ และมีประสิทธิภาพสูง</p>
+                    </article>
+                    <article class="service-card">
+                        <h3>ออกแบบ UI/UX</h3>
+                        <p>ออกแบบประสบการณ์ผู้ใช้ที่ยอดเยี่ยมและใช้งานง่าย</p>
+                    </article>
+                    <article class="service-card">
+                        <h3>พัฒนาแอปพลิเคชันมือถือ</h3>
+                        <p>พัฒนาแอปพลิเคชันมือถือสำหรับ iOS และ Android</p>
+                    </article>
+                    <article class="service-card">
+                        <h3>ให้คำปรึกษาด้านเทคโนโลยี</h3>
+                        <p>ให้คำปรึกษาและวางแผนเทคโนโลยีที่เหมาะสมกับธุรกิจของคุณ</p>
+                    </article>
+                </div>
+            </section>
+
+            <!-- Contact Form Section -->
+            <section id="contact" class="content-section" aria-labelledby="contact-heading">
+                <h2 id="contact-heading">ติดต่อเรา</h2>
+                
+                <!-- Alert Messages -->
+                <div id="alert-container" aria-live="polite"></div>
+
+                <form id="contactForm" novalidate aria-labelledby="contact-heading">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="name" id="name-label">ชื่อ-นามสกุล <span aria-label="จำเป็น" aria-required="true">*</span></label>
+                            <input 
+                                type="text" 
+                                id="name" 
+                                name="name" 
+                                required 
+                                aria-labelledby="name-label"
+                                aria-describedby="name-error"
+                                autocomplete="name"
+                                minlength="2"
+                                maxlength="100"
+                            >
+                            <div id="name-error" class="error" role="alert" aria-live="polite"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email" id="email-label">อีเมล <span aria-label="จำเป็น" aria-required="true">*</span></label>
+                            <input 
+                                type="email" 
+                                id="email" 
+                                name="email" 
+                                required 
+                                aria-labelledby="email-label"
+                                aria-describedby="email-error"
+                                autocomplete="email"
+                            >
+                            <div id="email-error" class="error" role="alert" aria-live="polite"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="phone" id="phone-label">เบอร์โทรศัพท์</label>
+                            <input 
+                                type="tel" 
+                                id="phone" 
+                                name="phone" 
+                                aria-labelledby="phone-label"
+                                aria-describedby="phone-error"
+                                autocomplete="tel"
+                                pattern="[0-9+\-\s\(\)]+"
+                            >
+                            <div id="phone-error" class="error" role="alert" aria-live="polite"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="subject" id="subject-label">หัวข้อ <span aria-label="จำเป็น" aria-required="true">*</span></label>
+                            <select 
+                                id="subject" 
+                                name="subject" 
+                                required 
+                                aria-labelledby="subject-label"
+                                aria-describedby="subject-error"
+                            >
+                                <option value="">เลือกหัวข้อ</option>
+                                <option value="general">คำถามทั่วไป</option>
+                                <option value="support">ขอความช่วยเหลือ</option>
+                                <option value="business">ธุรกิจ</option>
+                                <option value="partnership">ความร่วมมือ</option>
+                            </select>
+                            <div id="subject-error" class="error" role="alert" aria-live="polite"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message" id="message-label">ข้อความ <span aria-label="จำเป็น" aria-required="true">*</span></label>
+                        <textarea 
+                            id="message" 
+                            name="message" 
+                            rows="5" 
+                            required 
+                            aria-labelledby="message-label"
+                            aria-describedby="message-error"
+                            minlength="10"
+                            maxlength="1000"
+                            placeholder="กรุณาเขียนข้อความของคุณที่นี่..."
+                        ></textarea>
+                        <div id="message-error" class="error" role="alert" aria-live="polite"></div>
+                    </div>
+
+                    <div class="btn-group">
+                        <button type="submit" class="btn" id="submit-btn">
+                            <span class="btn-text">ส่งข้อความ</span>
+                            <span class="spinner" style="display: none;"></span>
+                        </button>
+                        <button type="reset" class="btn btn-secondary">ล้างข้อมูล</button>
+                    </div>
+                </form>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer role="contentinfo">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>ติดต่อเรา</h3>
+                    <ul>
+                        <li>📧 info@techcorp.com</li>
+                        <li>📞 +66-2-123-4567</li>
+                        <li>📍 123 ถนนตัวอย่าง, กรุงเทพมหานคร 10400</li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>บริการ</h3>
+                    <ul>
+                        <li><a href="#services">พัฒนาเว็บไซต์</a></li>
+                        <li><a href="#services">ออกแบบ UI/UX</a></li>
+                        <li><a href="#services">พัฒนาแอปพลิเคชัน</a></li>
+                        <li><a href="#services">ให้คำปรึกษา</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>ติดตามเรา</h3>
+                    <ul>
+                        <li><a href="https://facebook.com/techcorp" target="_blank" rel="noopener noreferrer">Facebook</a></li>
+                        <li><a href="https://twitter.com/techcorp" target="_blank" rel="noopener noreferrer">Twitter</a></li>
+                        <li><a href="https://linkedin.com/company/techcorp" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 บริษัทเทคโนโลยีชั้นนำ. สงวนลิขสิทธิ์. | <a href="/privacy">นโยบายความเป็นส่วนตัว</a> | <a href="/terms">ข้อกำหนดการใช้งาน</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Enhanced JavaScript with accessibility and security features
+        (function() {
+            'use strict';
+
+            // DOM Elements
+            const navToggle = document.querySelector('.nav-toggle');
+            const navMenu = document.querySelector('.nav-menu');
+            const contactForm = document.getElementById('contactForm');
+            const alertContainer = document.getElementById('alert-container');
+            const submitBtn = document.getElementById('submit-btn');
+            const btnText = submitBtn.querySelector('.btn-text');
+            const spinner = submitBtn.querySelector('.spinner');
+
+            // Navigation Toggle
+            if (navToggle && navMenu) {
+                navToggle.addEventListener('click', function() {
+                    const isExpanded = this.getAttribute('aria-expanded') === 'true';
+                    this.setAttribute('aria-expanded', !isExpanded);
+                    navMenu.classList.toggle('active');
+                });
+            }
+
+            // Form Validation
+            const validators = {
+                name: {
+                    required: true,
+                    minLength: 2,
+                    maxLength: 100,
+                    pattern: /^[a-zA-Z\u0E00-\u0E7F\s]+$/
+                },
+                email: {
+                    required: true,
+                    pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+                },
+                phone: {
+                    required: false,
+                    pattern: /^[0-9+\-\s\(\)]+$/
+                },
+                subject: {
+                    required: true
+                },
+                message: {
+                    required: true,
+                    minLength: 10,
+                    maxLength: 1000
+                }
+            };
+
+            // Validation Functions
+            function validateField(field, rules) {
+                const value = field.value.trim();
+                const errorElement = document.getElementById(field.id + '-error');
+                
+                // Clear previous error
+                errorElement.textContent = '';
+                field.classList.remove('error');
+
+                // Required validation
+                if (rules.required && !value) {
+                    showFieldError(field, errorElement, 'กรุณากรอกข้อมูลนี้');
+                    return false;
+                }
+
+                // Pattern validation
+                if (rules.pattern && value && !rules.pattern.test(value)) {
+                    showFieldError(field, errorElement, 'รูปแบบข้อมูลไม่ถูกต้อง');
+                    return false;
+                }
+
+                // Length validation
+                if (rules.minLength && value.length < rules.minLength) {
+                    showFieldError(field, errorElement, `กรุณากรอกข้อมูลอย่างน้อย ${rules.minLength} ตัวอักษร`);
+                    return false;
+                }
+
+                if (rules.maxLength && value.length > rules.maxLength) {
+                    showFieldError(field, errorElement, `กรุณากรอกข้อมูลไม่เกิน ${rules.maxLength} ตัวอักษร`);
+                    return false;
+                }
+
+                return true;
+            }
+
+            function showFieldError(field, errorElement, message) {
+                errorElement.textContent = message;
+                field.classList.add('error');
+                field.setAttribute('aria-invalid', 'true');
+            }
+
+            function clearFieldError(field) {
+                const errorElement = document.getElementById(field.id + '-error');
+                errorElement.textContent = '';
+                field.classList.remove('error');
+                field.setAttribute('aria-invalid', 'false');
+            }
+
+            // Real-time validation
+            Object.keys(validators).forEach(fieldName => {
+                const field = document.getElementById(fieldName);
+                if (field) {
+                    field.addEventListener('blur', () => {
+                        validateField(field, validators[fieldName]);
+                    });
+
+                    field.addEventListener('input', () => {
+                        if (field.classList.contains('error')) {
+                            clearFieldError(field);
+                        }
+                    });
+                }
+            });
+
+            // Form Submission
+            if (contactForm) {
+                contactForm.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+
+                    // Validate all fields
+                    let isValid = true;
+                    Object.keys(validators).forEach(fieldName => {
+                        const field = document.getElementById(fieldName);
+                        if (field && !validateField(field, validators[fieldName])) {
+                            isValid = false;
+                        }
+                    });
+
+                    if (!isValid) {
+                        showAlert('กรุณาตรวจสอบข้อมูลที่กรอก', 'error');
+                        return;
+                    }
+
+                    // Show loading state
+                    setLoadingState(true);
+
+                    try {
+                        // Simulate API call
+                        await submitFormData(new FormData(this));
+                        showAlert('ส่งข้อความเรียบร้อยแล้ว! เราจะติดต่อกลับโดยเร็วที่สุด', 'success');
+                        this.reset();
+                    } catch (error) {
+                        showAlert('เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง', 'error');
+                        console.error('Form submission error:', error);
+                    } finally {
+                        setLoadingState(false);
+                    }
+                });
+            }
+
+            // Form submission function
+            async function submitFormData(formData) {
+                // In a real application, you would send this to your server
+                // For demo purposes, we'll simulate an API call
+                return new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                        // Simulate success (90% success rate)
+                        if (Math.random() > 0.1) {
+                            resolve();
+                        } else {
+                            reject(new Error('Network error'));
+                        }
+                    }, 2000);
+                });
+            }
+
+            // Loading state management
+            function setLoadingState(loading) {
+                if (loading) {
+                    submitBtn.classList.add('loading');
+                    btnText.style.display = 'none';
+                    spinner.style.display = 'inline-block';
+                    submitBtn.disabled = true;
+                } else {
+                    submitBtn.classList.remove('loading');
+                    btnText.style.display = 'inline';
+                    spinner.style.display = 'none';
+                    submitBtn.disabled = false;
+                }
+            }
+
+            // Alert system
+            function showAlert(message, type = 'info') {
+                const alert = document.createElement('div');
+                alert.className = `alert alert-${type}`;
+                alert.setAttribute('role', 'alert');
+                alert.textContent = message;
+
+                alertContainer.appendChild(alert);
+
+                // Auto-remove after 5 seconds
+                setTimeout(() => {
+                    if (alert.parentNode) {
+                        alert.parentNode.removeChild(alert);
+                    }
+                }, 5000);
+            }
+
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+
+            // Keyboard navigation support
+            document.addEventListener('keydown', function(e) {
+                // Escape key to close mobile menu
+                if (e.key === 'Escape' && navMenu.classList.contains('active')) {
+                    navToggle.click();
+                }
+            });
+
+            // Focus management for accessibility
+            document.addEventListener('focusin', function(e) {
+                if (e.target.closest('.nav-menu')) {
+                    navToggle.setAttribute('aria-expanded', 'true');
+                }
+            });
+
+            // Performance optimization: Lazy loading for images
+            if ('IntersectionObserver' in window) {
+                const imageObserver = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const img = entry.target;
+                            img.src = img.dataset.src;
+                            img.classList.remove('lazy');
+                            imageObserver.unobserve(img);
+                        }
+                    });
+                });
+
+                document.querySelectorAll('img[data-src]').forEach(img => {
+                    imageObserver.observe(img);
+                });
+            }
+
+            // Service Worker registration for PWA capabilities
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', () => {
+                    navigator.serviceWorker.register('/sw.js')
+                        .then(registration => {
+                            console.log('SW registered: ', registration);
+                        })
+                        .catch(registrationError => {
+                            console.log('SW registration failed: ', registrationError);
+                        });
+                });
+            }
+
+        })();
+    </script>
+</body>
+</html> 
